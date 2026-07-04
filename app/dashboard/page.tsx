@@ -48,7 +48,11 @@ export default function CustomerDashboardPage() {
     )
   }
 
-  const todayStr = new Date().toISOString().split('T')[0]
+  const localToday = new Date()
+  const yyyy = localToday.getFullYear()
+  const mm = String(localToday.getMonth() + 1).padStart(2, '0')
+  const dd = String(localToday.getDate()).padStart(2, '0')
+  const todayStr = `${yyyy}-${mm}-${dd}`
   const upcoming = reservations.filter(
     (r) => (r.status === 'confirmed' || r.status === 'pending') && r.date >= todayStr
   )

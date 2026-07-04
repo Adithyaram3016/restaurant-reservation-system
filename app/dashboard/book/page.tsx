@@ -25,7 +25,11 @@ interface FormErrors {
 
 export default function BookReservationPage() {
   const router = useRouter()
-  const today = new Date().toISOString().split('T')[0]
+  const localToday = new Date()
+  const yyyy = localToday.getFullYear()
+  const mm = String(localToday.getMonth() + 1).padStart(2, '0')
+  const dd = String(localToday.getDate()).padStart(2, '0')
+  const today = `${yyyy}-${mm}-${dd}`
   const [form, setForm] = useState<FormState>({ date: '', timeSlot: '', guests: '' })
   const [errors, setErrors] = useState<FormErrors>({})
   const [assignedTable, setAssignedTable] = useState<number | null>(null)
