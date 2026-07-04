@@ -68,14 +68,6 @@ export default function AdminLoginPage() {
             </p>
           </div>
 
-          {/* Evaluator Helper Box */}
-          <div className="rounded-xl bg-slate-800 border border-slate-700/60 p-3 mb-6 text-xs text-slate-300">
-            <span className="font-semibold text-primary"></span> Use{' '}
-            <code className="bg-slate-950 px-1 py-0.5 rounded text-emerald-400 font-mono select-all">admin@tablemaster.com</code>{' '}
-            / password{' '}
-            <code className="bg-slate-950 px-1 py-0.5 rounded text-emerald-400 font-mono select-all">admin123</code>.
-          </div>
-
           <form onSubmit={handleSubmit} noValidate className="space-y-4">
             {/* Email */}
             <div className="space-y-1.5">
