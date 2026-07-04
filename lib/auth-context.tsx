@@ -10,6 +10,8 @@ export interface User {
   name: string
   email: string
   role: 'customer' | 'admin'
+  phone?: string
+  city?: string
 }
 
 interface AuthContextType {
@@ -18,6 +20,7 @@ interface AuthContextType {
   login: (credentials: any, requiredRole?: 'customer' | 'admin') => Promise<void>
   register: (details: any) => Promise<void>
   logout: () => void
+  refreshUser: () => Promise<void>
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
@@ -92,8 +95,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     router.push('/login')
   }
 
+  const refreshUser = async () => {
+    try {
+      const response = await api.auth.getMe()
+      setUser(response.user)
+    } catch (error) {
+      console.error('Failed to refresh user session:', error)
+    }
+  }
+
   return (
-    <AuthContext.Provider value={{ user, loading, login, register, logout }}>
+    <AuthContext.Provider value={{ user, loading, login, register, logout, refreshUser }}>
       {children}
     </AuthContext.Provider>
   )

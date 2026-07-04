@@ -6,23 +6,26 @@ import { User, Mail, Phone, MapPin, Save, Loader2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useAuth } from '@/lib/auth-context'
 
+import { api } from '@/lib/api'
+
 export default function ProfilePage() {
-  const { user, loading: authLoading } = useAuth()
+  const { user, loading: authLoading, refreshUser } = useAuth()
   const [form, setForm] = useState({
     name: '',
     email: '',
-    phone: '+1 (555) 012-3456',
-    city: 'San Francisco, CA',
+    phone: '',
+    city: '',
   })
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     if (user) {
-      setForm((p) => ({
-        ...p,
-        name: user.name,
-        email: user.email,
-      }))
+      setForm({
+        name: user.name || '',
+        email: user.email || '',
+        phone: user.phone || '',
+        city: user.city || '',
+      })
     }
   }, [user])
 
@@ -34,9 +37,20 @@ export default function ProfilePage() {
   async function handleSave(e: React.FormEvent) {
     e.preventDefault()
     setLoading(true)
-    await new Promise((r) => setTimeout(r, 700))
-    setLoading(false)
-    toast.success('Profile details saved locally.')
+    try {
+      await api.auth.updateProfile({
+        name: form.name,
+        email: form.email,
+        phone: form.phone,
+        city: form.city
+      })
+      await refreshUser()
+      toast.success('Profile details saved successfully.')
+    } catch (error: any) {
+      toast.error(error.message || 'Failed to update profile.')
+    } finally {
+      setLoading(false)
+    }
   }
 
   if (authLoading) {

@@ -51,6 +51,7 @@ export const api = {
       request('/auth/register', { method: 'POST', body: JSON.stringify(details) }),
     getMe: () => request('/auth/me', { method: 'GET' }),
     listUsers: () => request('/auth/users', { method: 'GET' }),
+    updateProfile: (profileData: any) => request('/auth/profile', { method: 'PUT', body: JSON.stringify(profileData) }),
   },
   reservations: {
     create: (reservationData: any) =>

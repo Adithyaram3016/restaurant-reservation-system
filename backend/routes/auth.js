@@ -45,7 +45,9 @@ router.post('/register', async (req, res) => {
         id: user._id,
         name: user.name,
         email: user.email,
-        role: user.role
+        role: user.role,
+        phone: user.phone || '',
+        city: user.city || ''
       }
     });
   } catch (error) {
@@ -81,7 +83,9 @@ router.post('/login', async (req, res) => {
         id: user._id,
         name: user.name,
         email: user.email,
-        role: user.role
+        role: user.role,
+        phone: user.phone || '',
+        city: user.city || ''
       }
     });
   } catch (error) {
@@ -98,11 +102,53 @@ router.get('/me', auth, async (req, res) => {
         id: req.user._id,
         name: req.user.name,
         email: req.user.email,
-        role: req.user.role
+        role: req.user.role,
+        phone: req.user.phone || '',
+        city: req.user.city || ''
       }
     });
   } catch (error) {
     res.status(500).json({ error: 'Server error.' });
+  }
+});
+
+// PUT /api/auth/profile - Update user profile details
+router.put('/profile', auth, async (req, res) => {
+  try {
+    const { name, email, phone, city } = req.body;
+    const user = await User.findById(req.user._id);
+    if (!user) {
+      return res.status(404).json({ error: 'User not found.' });
+    }
+
+    if (email && email !== user.email) {
+      const emailExists = await User.findOne({ email });
+      if (emailExists) {
+        return res.status(400).json({ error: 'Email is already taken by another account.' });
+      }
+      user.email = email;
+    }
+
+    if (name) user.name = name;
+    if (phone !== undefined) user.phone = phone;
+    if (city !== undefined) user.city = city;
+
+    await user.save();
+
+    res.json({
+      message: 'Profile updated successfully',
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        phone: user.phone || '',
+        city: user.city || ''
+      }
+    });
+  } catch (error) {
+    console.error('Profile update error:', error);
+    res.status(500).json({ error: 'Server error updating profile.' });
   }
 });
 
