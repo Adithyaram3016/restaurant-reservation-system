@@ -1,12 +1,29 @@
 'use client'
 
+import { useEffect } from 'react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
-import { UtensilsCrossed, Star, Clock, Shield } from 'lucide-react'
+import { UtensilsCrossed, Star, Clock, Shield, Loader2 } from 'lucide-react'
 import { useAuth } from '@/lib/auth-context'
 
 export default function HomePage() {
-  const { user, logout } = useAuth()
+  const { user, loading, logout } = useAuth()
+  const router = useRouter()
+
+  useEffect(() => {
+    if (!loading && user) {
+      router.replace(user.role === 'admin' ? '/admin' : '/dashboard')
+    }
+  }, [user, loading, router])
+
+  if (loading) {
+    return (
+      <div className="flex h-screen items-center justify-center bg-background">
+        <Loader2 className="w-8 h-8 text-primary animate-spin" />
+      </div>
+    )
+  }
 
   return (
     <main className="min-h-screen flex flex-col">
