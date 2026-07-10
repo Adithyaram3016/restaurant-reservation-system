@@ -60,11 +60,11 @@ export default function LoginPage() {
           </p>
           <div className="mt-12 grid grid-cols-3 gap-4 text-center">
             {[
-              { label: 'Tables Managed', value: '2,400+' },
-              { label: 'Reservations', value: '18k+' },
-              { label: 'Restaurants', value: '340+' },
-            ].map(({ label, value }) => (
-              <div key={label} className="bg-white/10 rounded-2xl px-4 py-5">
+              { id: 'secure', label: <b>Secure Login</b>, value: '🛡️' },
+              { id: 'reservation', label: <b>Reservation Management</b>, value: '📅' },
+              { id: 'prevention', label: <b>Double Booking Prevention</b>, value: '🚫' },
+            ].map(({ id, label, value }) => (
+              <div key={id} className="bg-white/10 rounded-2xl px-4 py-5">
                 <p className="text-2xl font-bold text-white">{value}</p>
                 <p className="text-xs text-white/60 mt-1">{label}</p>
               </div>
@@ -132,7 +132,7 @@ export default function LoginPage() {
               <div className="space-y-1.5">
                 <div className="flex items-center justify-between">
                   <label htmlFor="password" className="text-sm font-medium text-foreground">
-                     Password
+                    Password
                   </label>
                   <button type="button" className="text-xs text-primary hover:underline">
                     Forgot password?

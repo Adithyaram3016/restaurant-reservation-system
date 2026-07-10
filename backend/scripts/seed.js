@@ -3,6 +3,7 @@ const dotenv = require('dotenv');
 const path = require('path');
 const User = require('../models/User');
 const Table = require('../models/Table');
+const Reservation = require('../models/Reservation');
 
 // Load environment variables from backend directory
 dotenv.config({ path: path.join(__dirname, '../.env') });
@@ -31,7 +32,8 @@ async function seed() {
     // Clear existing data
     await User.deleteMany({ email: 'admin@tablemaster.com' });
     await Table.deleteMany({});
-    console.log('Cleared existing tables and admin user.');
+    await Reservation.deleteMany({});
+    console.log('Cleared existing tables, reservations, and admin user.');
 
     // Seed tables
     const seededTables = await Table.insertMany(tablesData);
